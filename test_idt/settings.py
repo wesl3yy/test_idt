@@ -117,12 +117,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=24),
-
     'AUTH_HEADER_TYPES': ('JWT',),
     'USER_ID_FIELD': 'id',
-
-    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
-    'TOKEN_TYPE_CLAIM': 'token_type',
 }
 
 JWT_AUTH = {
