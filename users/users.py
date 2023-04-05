@@ -3,7 +3,7 @@ from rest_framework.response import Response
 
 from .authentication import JWTAuthentication
 from .serializer import RegisterSerializer, UserSerializer
-from .models import User
+from .models import MyUser
 
 
 # Register API
@@ -29,7 +29,7 @@ class LoginAPI(generics.GenericAPIView):
 
         username = serializer.validated_data.get('username')
         password = serializer.validated_data.get('password')
-        user = User.objects.filter(username=username, password=password).first()
+        user = MyUser.objects.filter(username=username, password=password).first()
         if not user:
             return Response({'message': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
 
