@@ -19,6 +19,14 @@ class MyUser(AbstractBaseUser):
         managed = True
 
 
+class Category(models.Model):
+    name = models.CharField(max_length=100, null=False)
+
+    class Meta:
+        db_table = 'category'
+        managed = True
+
+
 class Product(models.Model):
     AVAILABLE = 1
     OUT_OF_STOCK = 0
@@ -27,11 +35,11 @@ class Product(models.Model):
         (OUT_OF_STOCK, 'Out of Stock')
     )
     name = models.CharField(max_length=100)
-    type = models.CharField(max_length=100)
     quantity = models.IntegerField()
     price = models.FloatField()
     is_available = models.IntegerField(choices=AVAILABLE_CHOICES, default=AVAILABLE)
     description = models.CharField(max_length=200)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='categories', related_query_name='category')
 
     class Meta:
         db_table = 'product'
