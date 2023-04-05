@@ -29,14 +29,11 @@ class StoreSerializer(serializers.ModelSerializer):
         fields = ('name', 'product_name', 'description')
 
 
-class ProductSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(read_only=True)
-    type = serializers.CharField(read_only=True)
-    quantity = serializers.IntegerField(read_only=True)
-    price = serializers.FloatField(read_only=True)
-    is_available = serializers.IntegerField(read_only=True)
-    description = serializers.CharField(read_only=True)
+class OrderSerializer(serializers.ModelSerializer):
+    customer_name = serializers.CharField(read_only=True)
+    product_name = serializers.CharField(read_only=True)
+    store_name = serializers.CharField(read_only=True)
 
     class Meta:
         model = Product
-        fields = '__all__'
+        fields = ('customer_name', 'product_name', 'store_name')

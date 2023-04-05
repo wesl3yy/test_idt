@@ -1,8 +1,8 @@
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import generics
-from .models import Store, Product
-from .serializer import StoreSerializer
+from .models import Store, Order
+from .serializer import StoreSerializer, OrderSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
@@ -30,15 +30,18 @@ class StoreAPIView(generics.GenericAPIView):
         return Response({'message': 'Permission denied'})
 
 
-class ProductAPIView(generics.GenericAPIView):
+class OrderAPIView(generics.GenericAPIView):
     authentication_classes = (JWTAuthentication,)
 
     def get_queryset(self, *args, **kwargs):
-        product_id = self.kwargs.get('product_id')
-        return Product.objects.filter(pk=product_id).values('name', 'description')
+        order_id = self.kwargs.get('order_id')
+        user_id = self.request.query_params.get('user_id')
+        store_id = self.request.query_params.get('store_id')
+        product_id = self.request.query_params.get('product_id')
+        return Order.objects.get_order_detail(order_id, user_id, store_id, product_id)
 
     def get_serializer_class(self):
-        return StoreSerializer
+        return OrderSerializer
 
     @action(detail=True, methods=['get'])
     def get(self, request, *args, **kwargs):

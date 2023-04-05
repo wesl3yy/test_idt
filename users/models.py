@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractBaseUser
 from django.db import models
 from django.conf import settings
-from .manage import StoreQueryset
+from .manage import StoreQueryset, OrderQueryset
 
 User = settings.AUTH_USER_MODEL
 
@@ -57,4 +57,18 @@ class Store(models.Model):
 
     class Meta:
         db_table = 'store'
+        managed = True
+
+
+class Order(models.Model):
+    quantity = models.IntegerField()
+    order_date = models.DateTimeField(auto_now_add=True)
+    store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='user_stores', related_query_name='store')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='user_products', related_query_name='product')
+    user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='user_orders', related_query_name='user_order')
+
+    objects = OrderQueryset.as_manager()
+
+    class Meta:
+        db_table = 'order'
         managed = True
