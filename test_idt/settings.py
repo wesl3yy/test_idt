@@ -82,8 +82,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'postgres',
-        'USER': 'postgres',
-        # 'USER': 'byduo',
+        # 'USER': 'postgres',
+        'USER': 'byduo',
         'PASSWORD': 'postgres',
         'HOST': '127.0.0.1',
         'PORT': '5432',
@@ -121,10 +121,6 @@ SIMPLE_JWT = {
     'USER_ID_FIELD': 'id',
 }
 
-JWT_AUTH = {
-    'JWT_RESPONSE_PAYLOAD_HANDLER':
-    'users.utils.jwt_response_payload_handler',
-}
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/

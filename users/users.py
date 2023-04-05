@@ -37,17 +37,3 @@ class LoginAPI(generics.GenericAPIView):
         jwt_token = JWTAuthentication.create_jwt(user)
 
         return Response({'token': jwt_token})
-
-    # def post(self, request, *args, **kwargs):
-    #     serializer = self.serializer_class(data=request.data)
-    #     serializer.is_valid(raise_exception=True)
-    #     username = serializer.validated_data.get('username')
-    #     password = serializer.validated_data.get('password')
-    #     user = User.objects.filter(username=username, password=password).first()
-    #
-    #     if not user:
-    #         return Response({'Message': 'Wrong username or password'})
-    #     header = JWTAuthentication.get_header(request=request.META.get('HTTP_AUTHORIZATION'))
-    #     raw_token = JWTAuthentication.get_raw_token(header)
-    #     jwt_token = JWTAuthentication.get_validated_token(raw_token)
-    #     return Response(jwt_token)

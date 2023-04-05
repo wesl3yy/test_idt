@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, UserStore
+from .models import User, UserStore, Store
 
 
 # Register serializer
@@ -27,3 +27,14 @@ class UserStoreSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserStore
         fields = ('name', 'category', 'bio')
+
+
+class StoreSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(read_only=True)
+    type = serializers.CharField(read_only=True)
+    quantity = serializers.IntegerField(read_only=True)
+    is_available = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = Store
+        fields = ('name', 'type', 'quantity', 'is_available')
