@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import authentication
 from rest_framework.exceptions import AuthenticationFailed, ParseError
 
-User = get_user_model()
+MyUser = get_user_model()
 
 
 class JWTAuthentication(authentication.BaseAuthentication):
@@ -31,7 +31,7 @@ class JWTAuthentication(authentication.BaseAuthentication):
         if username is None:
             raise AuthenticationFailed('User identifier not found in JWT')
 
-        user = User.objects.filter(username=username).first()
+        user = MyUser.objects.filter(username=username).first()
         if user is None:
                 raise AuthenticationFailed('User not found')
 

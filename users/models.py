@@ -1,12 +1,13 @@
 from django.contrib.auth.models import AbstractBaseUser
 from django.db import models
 from django.conf import settings
+from .manage import StoreQueryset
 
 User = settings.AUTH_USER_MODEL
 
 
 # Create your models here.
-class User(AbstractBaseUser):
+class MyUser(AbstractBaseUser):
     username = models.CharField(max_length=100, unique=True, null=False)
     password = models.CharField(max_length=100, null=False)
     is_active = models.BooleanField(default=True)
@@ -18,18 +19,7 @@ class User(AbstractBaseUser):
         managed = True
 
 
-class UserStore(models.Model):
-    name = models.CharField(max_length=100)
-    category = models.CharField(max_length=100)
-    bio = models.CharField(max_length=100)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='users', related_query_name='user')
-
-    class Meta:
-        db_table = 'user_store'
-        managed = True
-
-
-class Store(models.Model):
+class Product(models.Model):
     AVAILABLE = 1
     OUT_OF_STOCK = 0
     AVAILABLE_CHOICES = (
@@ -39,8 +29,23 @@ class Store(models.Model):
     name = models.CharField(max_length=100)
     type = models.CharField(max_length=100)
     quantity = models.IntegerField()
-    is_available = models.CharField(choices=AVAILABLE_CHOICES, max_length=1, default=AVAILABLE)
-    store = models.ForeignKey(UserStore, on_delete=models.CASCADE, related_name='store')
+    price = models.FloatField()
+    is_available = models.IntegerField(choices=AVAILABLE_CHOICES, default=AVAILABLE)
+    description = models.CharField(max_length=200)
+
+    class Meta:
+        db_table = 'product'
+        managed = True
+
+
+class Store(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.CharField(max_length=100)
+    user = models.OneToOneField(MyUser, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='products',
+                                related_query_name='product')
+
+    objects = StoreQueryset.as_manager()
 
     class Meta:
         db_table = 'store'
