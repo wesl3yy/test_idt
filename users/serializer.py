@@ -33,7 +33,9 @@ class OrderSerializer(serializers.ModelSerializer):
     customer_name = serializers.CharField(read_only=True)
     product_name = serializers.CharField(read_only=True)
     store_name = serializers.CharField(read_only=True)
+    order_date = serializers.DateTimeField(read_only=True)
+    quantity = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Product
-        fields = ('customer_name', 'product_name', 'store_name')
+        fields = ('customer_name', 'product_name', 'store_name', 'order_date', 'quantity')

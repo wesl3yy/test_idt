@@ -21,4 +21,4 @@ class OrderQueryset(QuerySet):
             user_id=user_id,
             product_id=product_id,
             store_id=store_id
-        ).values('customer_name', 'product_name', 'store_name')
+        ).values('customer_name', 'product_name', 'store_name', 'order_date', 'quantity')
