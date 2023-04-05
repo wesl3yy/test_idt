@@ -1,14 +1,16 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
 
-from .authentication import JWTAuthentication
+from .authentication import JWTAuthentication as jwt
 from .serializer import RegisterSerializer, UserSerializer
 from .models import MyUser
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 # Register API
 class RegisterApi(generics.GenericAPIView):
     serializer_class = RegisterSerializer
+    authentication_classes = (JWTAuthentication,)
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -34,6 +36,6 @@ class LoginAPI(generics.GenericAPIView):
             return Response({'message': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
 
         # Generate the JWT token
-        jwt_token = JWTAuthentication.create_jwt(user)
+        jwt_token = jwt.create_jwt(user)
 
         return Response({'token': jwt_token})
