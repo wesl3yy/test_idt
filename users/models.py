@@ -34,10 +34,10 @@ class Product(models.Model):
         (AVAILABLE, 'Available'),
         (OUT_OF_STOCK, 'Out of Stock')
     )
-    name = models.CharField(max_length=100)
-    quantity = models.IntegerField()
-    price = models.FloatField()
-    is_available = models.IntegerField(choices=AVAILABLE_CHOICES, default=AVAILABLE)
+    name = models.CharField(max_length=100, null=False)
+    quantity = models.IntegerField(null=False)
+    price = models.FloatField(null=False)
+    is_available = models.IntegerField(choices=AVAILABLE_CHOICES, default=AVAILABLE, null=False)
     description = models.CharField(max_length=200)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='categories', related_query_name='category')
 
@@ -47,7 +47,7 @@ class Product(models.Model):
 
 
 class Store(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, null=False)
     description = models.CharField(max_length=100)
     user = models.OneToOneField(MyUser, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='products',
@@ -61,8 +61,8 @@ class Store(models.Model):
 
 
 class Order(models.Model):
-    quantity = models.IntegerField()
-    order_date = models.DateTimeField(auto_now_add=True)
+    quantity = models.IntegerField(null=False)
+    order_date = models.DateTimeField(auto_now_add=True, null=False)
     store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='user_stores', related_query_name='store')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='user_products', related_query_name='product')
     user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='user_orders', related_query_name='user_order')
