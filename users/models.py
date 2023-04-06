@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractBaseUser
 from django.db import models
 from django.conf import settings
-from .manage import StoreQueryset, OrderQueryset
+from .manage import StoreQueryset, OrderQueryset, ListProductQueryset
 
 User = settings.AUTH_USER_MODEL
 
@@ -28,16 +28,7 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-    AVAILABLE = 1
-    OUT_OF_STOCK = 0
-    AVAILABLE_CHOICES = (
-        (AVAILABLE, 'Available'),
-        (OUT_OF_STOCK, 'Out of Stock')
-    )
     name = models.CharField(max_length=100, null=False)
-    quantity = models.IntegerField(null=False)
-    price = models.FloatField(null=False)
-    is_available = models.IntegerField(choices=AVAILABLE_CHOICES, default=AVAILABLE, null=False)
     description = models.CharField(max_length=200)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='categories', related_query_name='category')
 
@@ -50,13 +41,31 @@ class Store(models.Model):
     name = models.CharField(max_length=100, null=False)
     description = models.CharField(max_length=100)
     user = models.OneToOneField(MyUser, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='products',
-                                related_query_name='product')
 
     objects = StoreQueryset.as_manager()
 
     class Meta:
         db_table = 'store'
+        managed = True
+
+
+class StoreListProduct(models.Model):
+    AVAILABLE = 1
+    OUT_OF_STOCK = 0
+    AVAILABLE_CHOICES = (
+        (AVAILABLE, 'Available'),
+        (OUT_OF_STOCK, 'Out of Stock')
+    )
+    quantity = models.IntegerField(null=False)
+    price = models.FloatField(null=False)
+    is_available = models.IntegerField(choices=AVAILABLE_CHOICES, default=AVAILABLE, null=False)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='list_products', related_query_name='list_product')
+    store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='store_products', related_query_name='store_product')
+
+    objects = ListProductQueryset.as_manager()
+
+    class Meta:
+        db_table = 'list_product'
         managed = True
 
 

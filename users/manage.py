@@ -3,11 +3,11 @@ from django.db.models.query import QuerySet
 
 
 class StoreQueryset(QuerySet):
-    def get_product_name(self, store_id, product_id):
+    def get_product_name(self, store_id, user_id):
         return self.filter(
-            product_id=product_id,
+            user_id=user_id,
             pk=store_id
-        ).annotate(product_name=F('product__name'))
+        ).values('name', 'description')
 
 
 class OrderQueryset(QuerySet):
@@ -22,3 +22,20 @@ class OrderQueryset(QuerySet):
             product_id=product_id,
             store_id=store_id
         ).values('customer_name', 'product_name', 'store_name', 'order_date', 'quantity')
+
+
+class ListProductQueryset(QuerySet):
+    def get_product(self, store_id, product_id):
+        return self.filter(
+            store_id=store_id,
+            product_id=product_id
+        ).annotate(
+            product_name=F('product__name')
+        ).values('product_name', 'quantity', 'price', 'is_available')
+
+    def get_all_product(self, store_id):
+        return self.filter(
+            store_id=store_id
+        ).annotate(
+            product_name=F('product__name')
+        ).values('product_name', 'quantity', 'price', 'is_available')
