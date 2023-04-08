@@ -1,6 +1,8 @@
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import generics
+
+from .filters import StoreAPIFilterSet, OrderAPIFilterSet
 from .models import Store, Order, StoreListProduct
 from .serializer import StoreSerializer, OrderSerializer, ListProductSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -8,6 +10,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 class StoreAPIView(generics.GenericAPIView):
     authentication_classes = (JWTAuthentication,)
+    filterset_class = StoreAPIFilterSet
 
     def get_queryset(self, *args, **kwargs):
         user_id = self.kwargs.get('user_id')
@@ -32,6 +35,7 @@ class StoreAPIView(generics.GenericAPIView):
 
 class OrderAPIView(generics.GenericAPIView):
     authentication_classes = (JWTAuthentication,)
+    filterset_class = OrderAPIFilterSet
 
     def get_queryset(self, *args, **kwargs):
         order_id = self.kwargs.get('order_id')
