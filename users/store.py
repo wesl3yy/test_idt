@@ -6,6 +6,7 @@ from .filters import StoreAPIFilterSet, OrderAPIFilterSet
 from .models import Store, Order, StoreListProduct
 from .serializer import StoreSerializer, OrderSerializer, ListProductSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from .utils import get_access
 
 
 class StoreAPIView(generics.GenericAPIView):
@@ -22,14 +23,11 @@ class StoreAPIView(generics.GenericAPIView):
 
     @action(detail=True, methods=['get'])
     def get(self, request, *args, **kwargs):
-        header = JWTAuthentication.get_header(self, request=request)
+        header = get_access(self, request=request)
         if header:
-            raw_token = JWTAuthentication.get_raw_token(self, header)
-            valid_token = JWTAuthentication.get_validated_token(self, raw_token)
-            if valid_token:
-                queryset = self.filter_queryset(self.get_queryset())
-                serializer = self.get_serializer(queryset, many=True)
-                return Response(serializer.data, status=200)
+            queryset = self.filter_queryset(self.get_queryset())
+            serializer = self.get_serializer(queryset, many=True)
+            return Response(serializer.data, status=200)
         return Response({'message': 'Permission denied'})
 
 
@@ -49,14 +47,11 @@ class OrderAPIView(generics.GenericAPIView):
 
     @action(detail=True, methods=['get'])
     def get(self, request, *args, **kwargs):
-        header = JWTAuthentication.get_header(self, request=request)
+        header = get_access(self, request=request)
         if header:
-            raw_token = JWTAuthentication.get_raw_token(self, header)
-            valid_token = JWTAuthentication.get_validated_token(self, raw_token)
-            if valid_token:
-                queryset = self.filter_queryset(self.get_queryset())
-                serializer = self.get_serializer(queryset, many=True)
-                return Response(serializer.data, status=200)
+            queryset = self.filter_queryset(self.get_queryset())
+            serializer = self.get_serializer(queryset, many=True)
+            return Response(serializer.data, status=200)
         return Response({'message': 'Permission denied'})
 
 
@@ -75,12 +70,9 @@ class ListProductAPIView(generics.GenericAPIView):
 
     @action(detail=True, methods=['get'])
     def get(self, request, *args, **kwargs):
-        header = JWTAuthentication.get_header(self, request=request)
+        header = get_access(self, request=request)
         if header:
-            raw_token = JWTAuthentication.get_raw_token(self, header)
-            valid_token = JWTAuthentication.get_validated_token(self, raw_token)
-            if valid_token:
-                queryset = self.filter_queryset(self.get_queryset())
-                serializer = self.get_serializer(queryset, many=True)
-                return Response(serializer.data, status=200)
+            queryset = self.filter_queryset(self.get_queryset())
+            serializer = self.get_serializer(queryset, many=True)
+            return Response(serializer.data, status=200)
         return Response({'message': 'Permission denied'})
